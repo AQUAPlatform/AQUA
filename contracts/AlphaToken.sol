@@ -1,7 +1,7 @@
 pragma solidity ^0.4.17;
-import "zeppelin-solidity/contracts/token/StandardToken.sol";
+import "zeppelin-solidity/contracts/token/MintableToken.sol";
 
-contract AlphaToken is StandardToken {
+contract AlphaToken is MintableToken {
   string public name = "Alpha Token";
   string public symbol = "ALPHA";
   uint public decimals = 2;
