@@ -27,6 +27,24 @@ contract AlphaTokenSale is Crowdsale, Ownable {
   function createTokenContract() internal returns (MintableToken) {
   }
 
+  function buyTokens(address beneficiary) onlyWhite public payable {
+    return super.buyTokens(beneficiary);
+  }
+
+  function inWhiteList() internal view returns (bool) {
+    for (uint i = 0; i < whitelist.length; i++) {
+      if (whitelist[i] == msg.sender) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+modifier onlyWhite() {
+  require(inWhiteList());
+  _;
+}
+
   /**
    * back the left tokens to owner
    */
