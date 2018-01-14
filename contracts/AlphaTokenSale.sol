@@ -20,8 +20,8 @@ contract AlphaTokenSale is Crowdsale, Ownable {
       token = AlphaToken(tokenAddr);
   }
 
-  function supply() onlyOwner public {
-    token.transferFrom(owner, this, token.allowance(owner, this));
+  function supply() onlyOwner public returns (bool) {
+    return token.transferFrom(owner, this, token.allowance(owner, this));
   }
 
   function createTokenContract() internal returns (MintableToken) {
