@@ -10,7 +10,12 @@ contract('AlphaTokenSale', function(accounts) {
         const rate = new web3.BigNumber(1000);
         const wallet = accounts[0];
         const token = await AlphaToken.deployed();
-        const tokenSale = AlphaTokenSale.new(startTime, endTime, rate, wallet, token.address, web3.eth.accounts.slice(0, 4));
+        console.log("CREATE SALE");
+        const tokenSale = await AlphaTokenSale.new(
+            [startTime, endTime, rate, wallet, token.address, web3.eth.accounts.slice(0, 4)], 
+            {from: accounts[0]}
+        );
+        console.log("CREATED");
         return [token, tokenSale];
     };
 
