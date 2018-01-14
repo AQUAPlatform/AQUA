@@ -1,7 +1,7 @@
 require("babel-core/register");
 require("babel-polyfill");
-var AlphaToken = artifacts.require("./AlphaToken")
-var AlphaTokenSale = artifacts.require("./AlphaTokenSale")
+var AlphaToken = artifacts.require("./AlphaToken");
+var AlphaTokenSale = artifacts.require("./AlphaTokenSale");
 
 module.exports = async function(deployer, network, accounts) {
   const startTime = web3.eth.getBlock(web3.eth.blockNumber).timestamp + 1; // one second in the future

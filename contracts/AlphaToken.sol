@@ -1,11 +1,13 @@
 pragma solidity ^0.4.17;
 import "zeppelin-solidity/contracts/token/MintableToken.sol";
 
+
+//1 ETH:1000000 ALPHA, 1 Wei:1000 unit
 contract AlphaToken is MintableToken {
   string public name = "Alpha Token";
   string public symbol = "ALPHA";
-  uint public decimals = 2;
-  uint public INITIAL_SUPPLY = 10**8 * (10 ** decimals);
+  uint public decimals = 15;
+  uint public INITIAL_SUPPLY = 35000 * 1000000 * 2 * (10 ** decimals);
   
   function AlphaToken() public {
     totalSupply = INITIAL_SUPPLY;

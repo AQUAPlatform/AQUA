@@ -1,45 +1,41 @@
 require("babel-core/register");
 require("babel-polyfill");
-var AlphaTokenSale = artifacts.require("./AlphaTokenSale.sol");
 var AlphaToken = artifacts.require("./AlphaToken.sol");
+var AlphaTokenSale = artifacts.require("./AlphaTokenSale.sol");
 
 contract('AlphaTokenSale', function(accounts) {
     async function deploy_test() {
-        const startTime = web3.eth.getBlock(web3.eth.blockNumber).timestamp + 1; // one second in the future
-        const endTime = startTime + (86400 * 20); // 20 days
+        const startTime = new web3.BigNumber(web3.eth.getBlock(web3.eth.blockNumber).timestamp + 1); // one second in the future
+        const endTime = startTime.plus(86400 * 20); // 20 days
         const rate = new web3.BigNumber(1000);
         const wallet = accounts[0];
-        const token = await AlphaToken.deployed();
-        console.log("CREATE SALE");
-        const tokenSale = await AlphaTokenSale.new(
-            [startTime, endTime, rate, wallet, token.address, web3.eth.accounts.slice(0, 4)], 
-            {from: accounts[0]}
-        );
-        console.log("CREATED");
+        const token = await AlphaToken.new();
+        console.log("SALE CREATE");
+        // const tokenSale = await AlphaTokenSale.at("0x6143b9a2fc80b78208fb6e600a795661061d260d");
+        const tokenSale = await AlphaTokenSale.new(startTime, endTime, rate, wallet, token.address, web3.eth.accounts.slice(0, 5));
+        console.log("SALE CREATED");
         return [token, tokenSale];
     };
 
-    it("owner could recharge the supply", async function() {
+    it("owner prove the supply", async function() {
         const contracts = await deploy_test();
-        token = contracts[0];
-        tokenSale = contracts[1];
-        const approve_success = await token.aprove(tokenSale, 1000000, {from: accounts[0]});
-        assert.equal(approve_success, true, "approve should be done");
-        const supply_success = await token.supply({from: accounts[0]});
-        assert.equal(supply_success, true, "supply should be done");
+        const token = contracts[0];
+        const tokenSale = contracts[1];
+        const owner = accounts[0];
+        const dest = accounts[1];
+        const ownerBalanceBefore = await token.balanceOf.call(owner);
+        const balanceBefore = await token.balanceOf.call(dest);
+        const supplyAmount = new web3.BigNumber('3500000000000000000000000');
+        console.log("APPROVE");
+        const approve_info = await token.approve(tokenSale.address, supplyAmount, {from: owner});
+        console.log("APPROVE DONE");
+        console.log("allowance", (await token.allowance.call(owner, tokenSale.address)).toString());
+        // await token.transferFrom(owner, dest, supplyAmount, {from: dest});
+        await tokenSale.sendTransaction({from: dest, value: web3.toWei(2, "ether")});
+        console.log("allowance", (await token.allowance.call(owner, tokenSale.address)).toString());
+        const balanceAfter = await token.balanceOf.call(dest);
+        const ownerBalanceAfter = await token.balanceOf.call(owner);
+        assert.equal(balanceAfter.sub(balanceBefore).toString(), ownerBalanceBefore.sub(ownerBalanceAfter).toString(), "token transfer from owner to invester"); 
+        console.log(balanceBefore.toString(), balanceAfter.toString(), ownerBalanceBefore.sub(ownerBalanceAfter).toString());
     });
-
-    // it("should allow invest for use in whitelist", function() {
-    //     return Promise.all([AlphaToken.deployed(), AlphaTokenSale.deployed()]).then(function(contracts) {
-    //         token = contracts[0];
-    //         tokenSale = contracts[1];
-    //         return takenSale.sendTransaction({from: accounts[1], value: web3.toWei(5,  "ether")}).then(
-    //             function() {
-
-    //             }
-    //         );
-    //     }).then(function(balance) {
-    //         assert.equal(balance[0].valueOf(), balance[1].valueOf(), "totalSupply wasn't in the first account");
-    //     });
-    // });
 });
