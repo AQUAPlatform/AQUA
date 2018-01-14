@@ -1,8 +1,8 @@
 pragma solidity ^0.4.17;
 import "zeppelin-solidity/contracts/math/SafeMath.sol";
-import "zeppelin-solidity/contracts/ownership/Ownable.sol";
 import "./AlphaToken.sol";
 import "./LimitedInvest.sol";
+import "./Whitelist.sol";
 
 /**
  * @title AlphaTokenSale
@@ -12,7 +12,7 @@ import "./LimitedInvest.sol";
  * on a token per ETH rate. Funds collected are forwarded to a wallet
  * as they arrive.
  */
-contract AlphaTokenSale is LimitedInvest {
+contract AlphaTokenSale is LimitedInvest, Whitelist {
   using SafeMath for uint256;
 
   // The token being sold
@@ -33,7 +33,6 @@ contract AlphaTokenSale is LimitedInvest {
 
   address public tokenAddr;
 
-  mapping(address => bool) public whiteset;
 
   /**
    * event for token purchase logging
@@ -53,7 +52,7 @@ contract AlphaTokenSale is LimitedInvest {
                           uint256 _minInvest,
                           uint256 _maxInvest,
                           address _tokenAddr, 
-                          address[] _whitelist) LimitedInvest(_minInvest, _maxInvest) public {
+                          address[] _whitelist) LimitedInvest(_minInvest, _maxInvest) Whitelist(_whitelist) public {
     require(_startTime >= now);
     require(_endTime >= _startTime);
     require(_rate > 0);
@@ -64,9 +63,7 @@ contract AlphaTokenSale is LimitedInvest {
     rate = _rate;
     wallet = _wallet;
     tokenAddr = _tokenAddr;
-    for (uint i = 0; i < _whitelist.length; i++) {
-      whiteset[_whitelist[i]] = true;
-    }
+
     token = AlphaToken(tokenAddr);
   }
 
@@ -130,12 +127,5 @@ contract AlphaTokenSale is LimitedInvest {
     return now > endTime;
   }
 
-  function inWhiteList() internal view returns (bool) {
-    return whiteset[msg.sender];
-  }
 
-  modifier onlyWhite() {
-    require(inWhiteList());
-    _;
-  }
 }
