@@ -11,7 +11,7 @@ import "./AlphaToken.sol";
  * on a token per ETH rate. Funds collected are forwarded to a wallet
  * as they arrive.
  */
-contract AlphaTokenSale is Ownable {
+contract AlphaTokenSale {
   using SafeMath for uint256;
 
   // The token being sold
@@ -50,8 +50,6 @@ contract AlphaTokenSale is Ownable {
     require(_rate > 0);
     require(_wallet != address(0));
 
-
-
     startTime = _startTime;
     endTime = _endTime;
     rate = _rate;
@@ -75,22 +73,38 @@ contract AlphaTokenSale is Ownable {
     require(validPurchase());
 
     uint256 weiAmount = msg.value;
+    uint256 toReturn = 0;
+
+    uint256 available = token.allowance(wallet, this);
 
     // calculate token amount to be created
     uint256 tokens = weiAmount.mul(rate);
 
+    if (tokens > available) {
+      tokens = available;
+      weiAmount = tokens.div(rate);
+      toReturn = msg.value - weiAmount;
+    }
+
     // update state
     weiRaised = weiRaised.add(weiAmount);
 
-    token.transferFrom(owner, beneficiary, tokens);
+    token.transferFrom(wallet, beneficiary, tokens);
     TokenPurchase(msg.sender, beneficiary, weiAmount, tokens);
-    forwardFunds();
+    forwardFunds(weiAmount);
+    if (toReturn > 0) {
+      backwardFunds(toReturn);
+    }
   }
 
   // send ether to the fund collection wallet
   // override to create custom fund forwarding mechanisms
-  function forwardFunds() internal {
-    wallet.transfer(msg.value);
+  function forwardFunds(uint256 _funds) internal {
+    wallet.transfer(_funds);
+  }
+
+  function backwardFunds(uint256 _funds) internal {
+    msg.sender.transfer(_funds);
   }
 
   // @return true if the transaction can buy tokens

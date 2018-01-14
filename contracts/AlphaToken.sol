@@ -7,7 +7,7 @@ contract AlphaToken is MintableToken {
   string public name = "Alpha Token";
   string public symbol = "ALPHA";
   uint public decimals = 15;
-  uint public INITIAL_SUPPLY = 35000 * 1000000 * 2 * (10 ** decimals);
+  uint public INITIAL_SUPPLY = 2 * 35000 * (10 ** 6) * (10 ** decimals);
   
   function AlphaToken() public {
     totalSupply = INITIAL_SUPPLY;
