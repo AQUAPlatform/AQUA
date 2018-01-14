@@ -2,6 +2,7 @@ pragma solidity ^0.4.17;
 import "zeppelin-solidity/contracts/math/SafeMath.sol";
 import "zeppelin-solidity/contracts/ownership/Ownable.sol";
 import "./AlphaToken.sol";
+import "./LimitedInvest.sol";
 
 /**
  * @title AlphaTokenSale
@@ -11,7 +12,7 @@ import "./AlphaToken.sol";
  * on a token per ETH rate. Funds collected are forwarded to a wallet
  * as they arrive.
  */
-contract AlphaTokenSale {
+contract AlphaTokenSale is LimitedInvest {
   using SafeMath for uint256;
 
   // The token being sold
@@ -44,7 +45,15 @@ contract AlphaTokenSale {
   event TokenPurchase(address indexed purchaser, address indexed beneficiary, uint256 value, uint256 amount);
 
 
-  function AlphaTokenSale(uint256 _startTime, uint256 _endTime, uint256 _rate, address _wallet, address _tokenAddr, address[] _whitelist) public {
+  function AlphaTokenSale(
+                          uint256 _startTime, 
+                          uint256 _endTime, 
+                          uint256 _rate, 
+                          address _wallet, 
+                          uint256 _minInvest,
+                          uint256 _maxInvest,
+                          address _tokenAddr, 
+                          address[] _whitelist) LimitedInvest(_minInvest, _maxInvest) public {
     require(_startTime >= now);
     require(_endTime >= _startTime);
     require(_rate > 0);
@@ -72,8 +81,9 @@ contract AlphaTokenSale {
     require(beneficiary != address(0));
     require(validPurchase());
 
-    uint256 weiAmount = msg.value;
-    uint256 toReturn = 0;
+
+    uint256 weiAmount = validInvest(msg.value);
+    uint256 toReturn = msg.value.sub(weiAmount);
 
     uint256 available = token.allowance(wallet, this);
 
@@ -83,11 +93,12 @@ contract AlphaTokenSale {
     if (tokens > available) {
       tokens = available;
       weiAmount = tokens.div(rate);
-      toReturn = msg.value - weiAmount;
+      toReturn = msg.value.sub(weiAmount);
     }
 
     // update state
     weiRaised = weiRaised.add(weiAmount);
+    applyInvest(weiAmount);
 
     token.transferFrom(wallet, beneficiary, tokens);
     TokenPurchase(msg.sender, beneficiary, weiAmount, tokens);

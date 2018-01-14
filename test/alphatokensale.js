@@ -8,11 +8,13 @@ contract('AlphaTokenSale', function(accounts) {
         const startTime = new web3.BigNumber(web3.eth.getBlock(web3.eth.blockNumber).timestamp + 1); // one second in the future
         const endTime = startTime.plus(86400 * 20); // 20 days
         const rate = new web3.BigNumber(1000);
+        const minInvest = web3.toWei(1, "ether");
+        const maxInvest = web3.toWei(5000, "ether");
         const wallet = accounts[0];
         const token = await AlphaToken.new();
         console.log("SALE CREATE");
         // const tokenSale = await AlphaTokenSale.at("0x6143b9a2fc80b78208fb6e600a795661061d260d");
-        const tokenSale = await AlphaTokenSale.new(startTime, endTime, rate, wallet, token.address, web3.eth.accounts.slice(0, 3));
+        const tokenSale = await AlphaTokenSale.new(startTime, endTime, rate, wallet, minInvest, maxInvest, token.address, web3.eth.accounts.slice(0, 3));
         console.log("SALE CREATED");
         return [token, tokenSale];
     };
@@ -40,7 +42,7 @@ contract('AlphaTokenSale', function(accounts) {
         assert.equal(balanceAfter.sub(balanceBefore).toString(), ownerBalanceBefore.sub(ownerBalanceAfter).toString(), "token transfer from owner to invester"); 
         console.log(balanceBefore.toString(), balanceAfter.toString(), ownerBalanceBefore.sub(ownerBalanceAfter).toString());
         console.log(web3.fromWei(investorETHBefore.sub(web3.eth.getBalance(investor)), "ether").toString());
-        assert.equal(web3.fromWei(investorETHBefore.sub(web3.eth.getBalance(investor)), "ether").toString().slice(0, 6), "35000.", "35000 ETH exchange to 35000,000,000 ALPHA");
+        assert.equal(web3.fromWei(investorETHBefore.sub(web3.eth.getBalance(investor)), "ether").toString().slice(0, 5), "5000.", "35000 ETH exchange to 35000,000,000 ALPHA");
     });
 
     it("investor not in whitelist could not participate in the sale", async function() {

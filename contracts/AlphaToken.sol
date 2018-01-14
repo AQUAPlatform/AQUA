@@ -1,9 +1,9 @@
 pragma solidity ^0.4.17;
-import "zeppelin-solidity/contracts/token/MintableToken.sol";
+import "zeppelin-solidity/contracts/token/PausableToken.sol";
 
 
 //1 ETH:1000000 ALPHA, 1 Wei:1000 unit
-contract AlphaToken is MintableToken {
+contract AlphaToken is PausableToken {
   string public name = "Alpha Token";
   string public symbol = "ALPHA";
   uint public decimals = 15;
