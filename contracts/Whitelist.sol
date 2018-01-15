@@ -12,13 +12,13 @@ contract Whitelist is Ownable {
     }
   }
 
-  function makeWhite(address[] _whitelist) onlyOwner public {
+  function allowAddr(address[] _whitelist) onlyOwner public {
     for (uint i = 0; i < _whitelist.length; i++) {
       whiteset[_whitelist[i]] = true;
     }
   }
 
-  function remove(address[] _blacklist) onlyOwner public {
+  function blockAddr(address[] _blacklist) onlyOwner public {
     for (uint i = 0; i < _blacklist.length; i++) {
       whiteset[_blacklist[i]] = false;
     }
