@@ -75,7 +75,6 @@ contract AlphaTokenSale is LimitedInvest, Whitelist, Pausable {
 
   // low level token purchase function
   function buyTokens(address beneficiary) whenNotPaused onlyWhite public payable {
-    //TODO: give back some eth when tokens is not enough
     require(beneficiary != address(0));
     require(validPurchase());
 
