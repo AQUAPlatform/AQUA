@@ -15,10 +15,10 @@ contract VestingCtrl is Ownable {
 
   mapping(address => address[]) public vestingTable;
 
-  function VestingCtrl(address _token, address _wallet) public {
+  function VestingCtrl(address _tokenAddr, address _wallet) public {
     // constructor
     wallet = _wallet;
-    token = AlphaToken(_token);
+    token = AlphaToken(_tokenAddr);
   }
 
   //only support unrevokable vesting
