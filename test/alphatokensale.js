@@ -7,7 +7,7 @@ contract('AlphaTokenSale', function(accounts) {
     async function deploy_test() {
         const startTime = new web3.BigNumber(web3.eth.getBlock(web3.eth.blockNumber).timestamp + 1); // one second in the future
         const endTime = startTime.plus(86400 * 20); // 20 days
-        const rate = new web3.BigNumber(1000);
+        const rate = new web3.BigNumber(1000000);
         const minInvest = web3.toWei(1, "ether");
         const maxInvest = web3.toWei(5000, "ether");
         const wallet = accounts[0];
@@ -29,7 +29,7 @@ contract('AlphaTokenSale', function(accounts) {
         const investorETHBefore = web3.eth.getBalance(investor);
         const ownerBalanceBefore = await token.balanceOf.call(owner);
         const balanceBefore = await token.balanceOf.call(investor);
-        const supplyAmount = new web3.BigNumber('35000000000000000000000000');
+        const supplyAmount = new web3.BigNumber('35000000000000000000000000000');
         console.log("APPROVE");
         const approve_info = await token.approve(tokenSale.address, supplyAmount, {from: owner});
         console.log("APPROVE DONE");
@@ -55,7 +55,7 @@ contract('AlphaTokenSale', function(accounts) {
         const investorETHBefore = web3.eth.getBalance(investor);
         const ownerBalanceBefore = await token.balanceOf.call(owner);
         const balanceBefore = await token.balanceOf.call(investor);
-        const supplyAmount = new web3.BigNumber('35000000000000000000000000');
+        const supplyAmount = new web3.BigNumber('35000000000000000000000000000');
         console.log("APPROVE");
         const approve_info = await token.approve(tokenSale.address, supplyAmount, {from: owner});
         console.log("APPROVE DONE");

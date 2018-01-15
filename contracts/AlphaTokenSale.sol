@@ -1,5 +1,6 @@
 pragma solidity ^0.4.17;
 import "zeppelin-solidity/contracts/math/SafeMath.sol";
+import "zeppelin-solidity/contracts/lifecycle/Pausable.sol";
 import "./AlphaToken.sol";
 import "./LimitedInvest.sol";
 import "./Whitelist.sol";
@@ -12,7 +13,7 @@ import "./Whitelist.sol";
  * on a token per ETH rate. Funds collected are forwarded to a wallet
  * as they arrive.
  */
-contract AlphaTokenSale is LimitedInvest, Whitelist {
+contract AlphaTokenSale is LimitedInvest, Whitelist, Pausable {
   using SafeMath for uint256;
 
   // The token being sold
@@ -73,7 +74,7 @@ contract AlphaTokenSale is LimitedInvest, Whitelist {
   }
 
   // low level token purchase function
-  function buyTokens(address beneficiary) onlyWhite public payable {
+  function buyTokens(address beneficiary) whenNotPaused onlyWhite public payable {
     //TODO: give back some eth when tokens is not enough
     require(beneficiary != address(0));
     require(validPurchase());
@@ -124,7 +125,7 @@ contract AlphaTokenSale is LimitedInvest, Whitelist {
 
   // @return true if AlphaTokenSale event has ended
   function hasEnded() public view returns (bool) {
-    return now > endTime;
+    return paused || (now > endTime);
   }
 
 
