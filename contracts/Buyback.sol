@@ -29,10 +29,19 @@ contract Buyback is Ownable {
     if (approved > amount) {
       approved = amount;
     }
+    uint256 availableBalance = this.balance;
+    uint256 weiBack = convertBalance(approved);
+    if (availableBalance < weiBack) {
+      approved = availableBalance.mul(rate);
+      weiBack = availableBalance;
+    }
     token.transferFrom(msg.sender, this, approved);
     token.burn(approved);
-    uint256 weiBack = convertBalance(approved);
     msg.sender.transfer(weiBack);
+  }
+
+  function () external payable {
+    require(msg.sender == wallet);
   }
 
   function close() onlyOwner public {
