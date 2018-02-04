@@ -2,20 +2,20 @@ pragma solidity ^0.4.17;
 
 import "zeppelin-solidity/contracts/math/SafeMath.sol";
 import "zeppelin-solidity/contracts/ownership/Ownable.sol";
-import "./AlphaToken.sol";
+import "./AQUAToken.sol";
 
 contract Buyback is Ownable {
   using SafeMath for uint256;
   //wei:unit
   uint256 public rate;
-  AlphaToken public token;
+  AQUAToken public token;
   address public wallet;
 
   function Buyback(address _tokenAddr, address _wallet, uint256 _rate) public {
     // constructor
     rate = _rate;
     wallet = _wallet;
-    token = AlphaToken(_tokenAddr);
+    token = AQUAToken(_tokenAddr);
   }
 
   function convertBalance(uint256 tokens) view public returns (uint256) {

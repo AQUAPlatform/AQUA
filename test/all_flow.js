@@ -6,7 +6,7 @@ var VestingCtrl = artifacts.require("./VestingCtrl.sol");
 var Buyback = artifacts.require("./Buyback.sol");
 
 contract('ALL', function(accounts) {
-    const ALPHA_UNIT = new web3.BigNumber("1000000000000000000");
+    const AQUA_UNIT = new web3.BigNumber("1000000000000000000");
 
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -24,8 +24,8 @@ contract('ALL', function(accounts) {
         const maxInvest = web3.toWei(5000, "ether");
         const wallet = accounts[0];
         const token = await AlphaToken.new();
-        async function getALPHA(addr) {
-            return (await token.balanceOf.call(addr)).div(ALPHA_UNIT);
+        async function getAQUA(addr) {
+            return (await token.balanceOf.call(addr)).div(AQUA_UNIT);
         }
         const owner = accounts[0];
         const manager = accounts[1];

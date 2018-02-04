@@ -1,2 +1,2 @@
-# ALPHA
-Smart Contract for AlphaQuantPlatform
+# AQUA
+Smart Contract for AQUA-Platform

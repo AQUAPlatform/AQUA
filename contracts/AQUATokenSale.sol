@@ -1,23 +1,23 @@
 pragma solidity ^0.4.17;
 import "zeppelin-solidity/contracts/math/SafeMath.sol";
 import "zeppelin-solidity/contracts/lifecycle/Pausable.sol";
-import "./AlphaToken.sol";
+import "./AQUAToken.sol";
 import "./LimitedInvest.sol";
 import "./Whitelist.sol";
 
 /**
- * @title AlphaTokenSale
- * @dev AlphaTokenSale is a base contract for managing a token AlphaTokenSale.
- * AlphaTokenSales have a start and end timestamps, where investors can make
- * token purchases and the AlphaTokenSale will assign them tokens based
+ * @title AQUATokenSale
+ * @dev AQUATokenSale is a base contract for managing a token AQUATokenSale.
+ * AQUATokenSales have a start and end timestamps, where investors can make
+ * token purchases and the AQUATokenSale will assign them tokens based
  * on a token per ETH rate. Funds collected are forwarded to a wallet
  * as they arrive.
  */
-contract AlphaTokenSale is LimitedInvest, Whitelist, Pausable {
+contract AQUATokenSale is LimitedInvest, Whitelist, Pausable {
   using SafeMath for uint256;
 
   // The token being sold
-  AlphaToken public token;
+  AQUAToken public token;
 
   // start and end timestamps where investments are allowed (both inclusive)
   uint256 public startTime;
@@ -45,7 +45,7 @@ contract AlphaTokenSale is LimitedInvest, Whitelist, Pausable {
   event TokenPurchase(address indexed purchaser, address indexed beneficiary, uint256 value, uint256 amount);
 
 
-  function AlphaTokenSale(
+  function AQUATokenSale(
                           uint256 _startTime, 
                           uint256 _endTime, 
                           uint256 _rate, 
@@ -65,7 +65,7 @@ contract AlphaTokenSale is LimitedInvest, Whitelist, Pausable {
     wallet = _wallet;
     tokenAddr = _tokenAddr;
 
-    token = AlphaToken(tokenAddr);
+    token = AQUAToken(tokenAddr);
   }
 
   // fallback function can be used to buy tokens
@@ -122,7 +122,7 @@ contract AlphaTokenSale is LimitedInvest, Whitelist, Pausable {
     return withinPeriod && nonZeroPurchase;
   }
 
-  // @return true if AlphaTokenSale event has ended
+  // @return true if AQUATokenSale event has ended
   function hasEnded() public view returns (bool) {
     return paused || (now > endTime);
   }

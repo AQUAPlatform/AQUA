@@ -3,13 +3,13 @@ pragma solidity ^0.4.17;
 import "zeppelin-solidity/contracts/token/TokenVesting.sol";
 import "zeppelin-solidity/contracts/ownership/Ownable.sol";
 import "zeppelin-solidity/contracts/math/SafeMath.sol";
-import "./AlphaToken.sol";
+import "./AQUAToken.sol";
 
 contract VestingCtrl is Ownable {
   using SafeMath for uint256;
 
   //binded token
-  AlphaToken public token;
+  AQUAToken public token;
   //balance providor, VestingCtrl can operate the balance approved by the wallet
   address public wallet;
 
@@ -18,7 +18,7 @@ contract VestingCtrl is Ownable {
   function VestingCtrl(address _tokenAddr, address _wallet) public {
     // constructor
     wallet = _wallet;
-    token = AlphaToken(_tokenAddr);
+    token = AQUAToken(_tokenAddr);
   }
 
   //only support unrevokable vesting

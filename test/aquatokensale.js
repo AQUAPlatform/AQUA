@@ -42,7 +42,7 @@ contract('AlphaTokenSale', function(accounts) {
         assert.equal(balanceAfter.sub(balanceBefore).toString(), ownerBalanceBefore.sub(ownerBalanceAfter).toString(), "token transfer from owner to invester"); 
         console.log(balanceBefore.toString(), balanceAfter.toString(), ownerBalanceBefore.sub(ownerBalanceAfter).toString());
         console.log(web3.fromWei(investorETHBefore.sub(web3.eth.getBalance(investor)), "ether").toString());
-        assert.equal(web3.fromWei(investorETHBefore.sub(web3.eth.getBalance(investor)), "ether").toString().slice(0, 5), "5000.", "35000 ETH exchange to 35000,000,000 ALPHA");
+        assert.equal(web3.fromWei(investorETHBefore.sub(web3.eth.getBalance(investor)), "ether").toString().slice(0, 5), "5000.", "35000 ETH exchange to 35000,000,000 AQUA");
     });
 
     it("investor not in whitelist could not participate in the sale", async function() {
