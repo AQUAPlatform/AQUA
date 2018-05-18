@@ -8,7 +8,7 @@ contract AQUAToken is PausableToken, BurnableToken {
   string public name = "AQUA Token";
   string public symbol = "ALPHA";
   uint public decimals = 18;
-  uint public INITIAL_SUPPLY = 2 * 35000 * (10 ** 6) * (10 ** decimals);
+  uint public INITIAL_SUPPLY = 66666 * (50 * 10 ** 4) * (10 ** decimals);
   
   function AQUAToken() public {
     totalSupply = INITIAL_SUPPLY;
