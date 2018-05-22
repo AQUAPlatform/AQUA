@@ -13,11 +13,12 @@ module.exports = {
       gas: 4000000,
     },
     mainnet: {
-      host: '192.168.11.112',
+      host: '127.0.0.1',
       port: 8545,
       network_id: '*', // Match any network id,
-      gas: 4500000,
+      gas: 8000000,
       gasPrice: 25000000000
+      //from: "0x0000000000000000000000000000000000000001"
     }
   }
 }
